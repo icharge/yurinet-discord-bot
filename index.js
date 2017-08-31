@@ -1,6 +1,12 @@
 /*
   A bot that welcomes new guild members when they join
 */
+// The token of your bot - https://discordapp.com/developers/applications/me
+// Please Config the config.json
+
+// Import config
+var loader = require('docker-config-loader');
+var config = loader({secretName: 'secret_name', localPath: 'config.json'});
 
 // Import REPL for prompt
 const repl = require('repl');
@@ -10,9 +16,6 @@ const Discord = require('discord.js');
 
 // Create an instance of a Discord client
 const client = new Discord.Client();
-
-// The token of your bot - https://discordapp.com/developers/applications/me
-const token = 'MzQwOTE0ODA2MTcxMzY5NDg1.DIhExg.7eeEGCKE0xpwqTR4i7EqRkdx8CU';
 
 // /**
 //  * @type {"discord.js".Guild}
@@ -42,12 +45,12 @@ client.on('guildMemberAdd', member => {
 client.on('ready', () => {
   console.log('Im ready!');
 
-  const myGuild = client.guilds.find('id', '340528463704358912');
+  const myGuild = client.guilds.find('id', config.owner_server);
   myGuild.defaultChannel.send('Hi there !.  ^___^');
 });
 
 // Log our bot in
-client.login(token);
+client.login(config.token);
 
 var replServer = repl.start({
   prompt: 'YuriBot > ',
