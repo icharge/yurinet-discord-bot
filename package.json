@@ -8,7 +8,6 @@
   "license": "ISC",
   "dependencies": {
     "bufferutil": "^3.0.2",
-    "docker-config-loader": "^1.0.0",
     "discord.js": "^11.1.0",
     "erlpack": "github:hammerandchisel/erlpack",
     "node-opus": "^0.2.6",

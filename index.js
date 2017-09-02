@@ -5,9 +5,12 @@
 // Please Config the config.json
 
 // Import config
-var loader = require('docker-config-loader');
-var config = loader({secretName: 'secret_name', localPath: 'config.json'});
-var prefix = config.commandPrefix
+let config;
+try { config = require('./config.json'); 
+} catch (e) {
+	console.log(e.stack) 
+}
+const prefix = config.commandPrefix;
 
 // Import REPL for prompt
 const repl = require('repl');
@@ -17,17 +20,6 @@ const Discord = require('discord.js');
 
 // Create an instance of a Discord client
 const client = new Discord.Client();
-
-// /**
-//  * @type {"discord.js".Guild}
-//  */
-// var myGuild;
-
-// The ready event is vital, it means that your bot will only start reacting to information
-// from Discord _after_ ready is emitted
-client.on('ready', () => {
-  console.log('I am ready!');
-});
 
 // Create an event listener for new guild members
 client.on('guildMemberAdd', member => {

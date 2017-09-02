@@ -8,6 +8,6 @@ A Discord bot for **Yurinet server** that are still in development.
   "owner_id": "Owner_ID",
   "owner_server": "Owner_ServerId",
   "token": "Bot_Token",
-  "ommandPrefix": "..."
+  "commandPrefix": "..."
 }
 ```
