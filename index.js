@@ -7,6 +7,7 @@
 // Import config
 var loader = require('docker-config-loader');
 var config = loader({secretName: 'secret_name', localPath: 'config.json'});
+var prefix = config.commandPrefix
 
 // Import REPL for prompt
 const repl = require('repl');
@@ -47,6 +48,12 @@ client.on('ready', () => {
 
   const myGuild = client.guilds.find('id', config.owner_server);
   myGuild.defaultChannel.send('Hi there !.  ^___^');
+});
+
+client.on('message', message => {
+  if (message.content === 'ping') {
+    message.channel.send('อังกอ!');
+  }
 });
 
 // Log our bot in
