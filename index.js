@@ -1,8 +1,19 @@
 /*
-  A bot that welcomes new guild members when they join
+    Yurinet-discord-bot
+    The token of your bot - https://discordapp.com/developers/applications/me
+    Please Config the config.json
 */
-// The token of your bot - https://discordapp.com/developers/applications/me
-// Please Config the config.json
+// Import REPL for prompt
+try { const repl = require('repl');
+} catch (e) {
+	console.error(e.stack);
+}
+
+// Import the discord.js module
+try { const Discord = require('discord.js');
+} catch (e) {
+	console.error(e.stack);
+}
 
 // Import config
 let config;
@@ -12,11 +23,8 @@ try { config = require('./config.json');
 }
 const prefix = config.commandPrefix;
 
-// Import REPL for prompt
-const repl = require('repl');
+// Import command
 
-// Import the discord.js module
-const Discord = require('discord.js');
 
 // Create an instance of a Discord client
 const client = new Discord.Client();
@@ -42,14 +50,11 @@ client.on('ready', () => {
   myGuild.defaultChannel.send('Hi there !.  ^___^');
 });
 
-client.on('message', message => {
-  if (message.content === 'ping') {
-    message.channel.send('อังกอ!');
-  }
-});
-
 // Log our bot in
-client.login(config.token);
+try { client.login(config.token);
+} catch (e) {
+	console.log(e.stack)
+}
 
 var replServer = repl.start({
   prompt: 'YuriBot > ',
@@ -66,3 +71,17 @@ function net() { // that I just found!
     throw net;
 }// Throw it on him, not me!
 // Urgh, let's try somthing else
+
+/*
+function invite() {
+	client.generateInvite(['ADMINISTRATOR'])
+  .then(link => {
+    console.log(`Generated bot invite link: ${link}`);
+  });
+}
+client.on('message', message => {
+	if (message.content === '$...invite') {
+    invite();
+	message.channel.send('Look in console for invite link');
+	}});
+*/
