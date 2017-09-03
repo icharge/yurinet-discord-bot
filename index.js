@@ -6,13 +6,13 @@
 // Import REPL for prompt
 try { const repl = require('repl');
 } catch (e) {
-	console.error(e.stack);
+	console.log(e.stack);
 }
 
 // Import the discord.js module
 try { const Discord = require('discord.js');
 } catch (e) {
-	console.error(e.stack);
+	console.log(e.stack);
 }
 
 // Import config
@@ -80,7 +80,7 @@ function invite() {
   });
 }
 client.on('message', message => {
-	if (message.content === '$...invite') {
+	if (message.content === '...invite') {
     invite();
 	message.channel.send('Look in console for invite link');
 	}});
