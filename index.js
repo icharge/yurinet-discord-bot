@@ -4,13 +4,15 @@
     Please Config the config.json
 */
 // Import REPL for prompt
-try { const repl = require('repl');
+let repl;
+try { repl = require('repl');
 } catch (e) {
 	console.log(e.stack);
 }
 
 // Import the discord.js module
-try { const Discord = require('discord.js');
+let Discord;
+try { Discord = require('discord.js');
 } catch (e) {
 	console.log(e.stack);
 }
