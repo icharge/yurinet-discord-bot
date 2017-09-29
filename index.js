@@ -4,27 +4,17 @@
     Please Config the config.json
 */
 // Import REPL for prompt
-let repl;
-try { repl = require('repl');
-} catch (e) {
-	console.log(e.stack);
-}
-
+let repl = require('repl');
 // Import the discord.js module
-let Discord;
-try { Discord = require('discord.js');
-} catch (e) {
-	console.log(e.stack);
-}
-
+let Discord = require('discord.js');
 // Import config
 let config;
-try { config = require('./config.json'); 
+try {
+	config = require('./config.json');
 } catch (e) {
-	console.log(e.stack) 
+	console.error(e.stack);
 }
 const prefix = config.commandPrefix;
-
 // Import command
 
 
@@ -33,57 +23,51 @@ const client = new Discord.Client();
 
 // Create an event listener for new guild members
 client.on('guildMemberAdd', member => {
-  // Send the message to the guilds default channel (usually #general), mentioning the member
-  member.guild.defaultChannel.send(`Welcome to the ${member.guild.name} server, ${member}!`);
+	// Send the message to the guilds default channel (usually #general), mentioning the member
+	member.guild.defaultChannel.send(
+		`Welcome to the ${member.guild.name} server, ${member}!`);
 
-  // If you want to send the message to a designated channel on a server instead
-  // you can do the following:
-  const channel = member.guild.channels.find('name', 'chat-logs');
-  // Do nothing if the channel wasn't found on this server
-  if (!channel) return;
-  // Send the message, mentioning the member
-  channel.send(`Welcome to the ${member.guild.name} server, ${member}`);
+	// If you want to send the message to a designated channel on a server instead
+	// you can do the following:
+	const channel = member.guild.channels.find('name', 'chat-logs');
+	// Do nothing if the channel wasn't found on this server
+	if (!channel) return;
+	// Send the message, mentioning the member
+	channel.send(`Welcome to the ${member.guild.name} server, ${member}`);
 });
 
 client.on('ready', () => {
-  console.log('Im ready!');
-
-  const myGuild = client.guilds.find('id', config.owner_server);
-  myGuild.defaultChannel.send('Hi there !.  ^___^');
+	console.log('Im ready!');
+	const myGuild = client.guilds.find('id', config.owner_server);
+	var replServer = repl.start({
+		prompt: 'YuriBot > ',
+	});
+	replServer.context.client = client;
+	invite();
 });
 
 // Log our bot in
-try { client.login(config.token);
+try {
+	client.login(config.token);
 } catch (e) {
 	console.log(e.stack)
 }
 
-var replServer = repl.start({
-  prompt: 'YuriBot > ',
-});
 
-replServer.context.client = client;
 
 // Now look at this net
 function net() { // that I just found!
-    // When I say go,
-    // be ready to throw!
+	// When I say go,
+	// be ready to throw!
 
-    // GO!
-    throw net;
-}// Throw it on him, not me!
+	// GO!
+	throw net;
+} // Throw it on him, not me!
 // Urgh, let's try somthing else
 
-/*
 function invite() {
 	client.generateInvite(['ADMINISTRATOR'])
-  .then(link => {
-    console.log(`Generated bot invite link: ${link}`);
-  });
+		.then(link => {
+			console.log(`invite link: ${link}`);
+		});
 }
-client.on('message', message => {
-	if (message.content === '...invite') {
-    invite();
-	message.channel.send('Look in console for invite link');
-	}});
-*/
