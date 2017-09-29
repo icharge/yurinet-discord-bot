@@ -1,6 +1,5 @@
 {
-  "owner_id": "Owner_ID",
-  "owner_server": "Owner_ServerId",
+  "owner_server": "ServerId",
   "token": "Bot_Token",
   "commandPrefix": "..."
 }
