@@ -1,5 +1,4 @@
 {
-  "owner_server": "ServerId",
   "token": "Bot_Token",
   "commandPrefix": "..."
 }

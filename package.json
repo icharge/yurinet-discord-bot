@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "YuriNET's Discord bot",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {"start": "node index.js"},
   "author": "Norrapat Nimmanee",
   "license": "ISC",
   "dependencies": {
