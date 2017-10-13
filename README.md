@@ -1,12 +1,17 @@
 # yurinet-discord-bot
 A Discord bot for **Yurinet server** that are still in development.
 ## Installation
-```npm install ```
+if this is frist time install do
+
+Windows: ```npm install --global windows-build-tools``` With administrator permissions.
+
+Linux: get build-essential and python 2.7 installed
+
+Then ```npm install ```
 ## Config.json
 ```json
 {
-  "owner_id": "Owner_ID",
-  "owner_server": "Owner_ServerId",
-  "token": "Bot_Token" 
+  "token": "bottoken",
+  "commandPrefix": "..."
 }
 ```

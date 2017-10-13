@@ -1,14 +1,16 @@
 {
   "name": "yuribot-discord",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "YuriNET's Discord bot",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "start": "node index.js"
+  },
   "author": "Norrapat Nimmanee",
   "license": "ISC",
   "dependencies": {
     "bufferutil": "^3.0.2",
-    "docker-config-loader": "^1.0.0",
     "discord.js": "^11.1.0",
     "erlpack": "github:hammerandchisel/erlpack",
     "node-opus": "^0.2.6",
