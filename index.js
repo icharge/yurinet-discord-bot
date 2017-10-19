@@ -31,11 +31,6 @@ try {
 	console.log(e.stack)
 }
 
-let detectword = ['กระตุก', 'แลค', 'จอดำ', 'ออนไลน์', 'ค้าง', 'DDwrapper'];
-let DDwrapper = ['กระตุก', 'แลค', 'ค้าง', 'DDwrapper', 'เมนู']
-let yurinet = ['yurinet', 'ออนไลน์', 'online']
-let game = ['game', 'ตัวเกม', 'เกม', 'yuri']
-let black_screen = ['จอดำ', 'black_screen']
 client.on('message', async message => {
 	if (message.author.bot) return
 	console.log('message = ' + message)
@@ -47,7 +42,7 @@ client.on('message', async message => {
 	if (command.startsWith(prefix)) {
 		let cmd = command.slice(prefix.length);
 		console.log(cmd)
-		if (cmd === "DDwrapper") {
+		if (cmd === "DDraw") {
 			let DDwrapperEmbed = new Discord.RichEmbed()
 				.setAuthor(client.user.username, client.user.avatarURL)
 				.setColor("#EE82EE")
@@ -86,51 +81,5 @@ client.on('message', async message => {
 				embed: gameEmbed
 			});
 		};
-	} else {
-		let detected = [];
-		let helper = [];
-		DDwrapper.forEach(word => {
-			if (message.content.indexOf(word) > -1) {
-				if (!detected.length) detected.push(word);
-				if (!helper.length) helper.push("DDwrapper");
-			}
-		})
-		yurinet.forEach(word => {
-			if (message.content.indexOf(word) > -1) {
-				if (!detected.length) detected.push(word);
-				if (!helper.length) helper.push("yurinet");
-			}
-		})
-		game.forEach(word => {
-			if (message.content.indexOf(word) > -1) {
-				if (!detected.length) detected.push(word);
-				if (!helper.length) helper.push("game");
-			}
-		})
-		if (detected.length == 0) return
-		if (message.content.indexOf())
-			message.channel.send("เราได้ตรวจพบคำ `" + detected +
-				"` ลองพิมพ์ `" + prefix + helper + "`");
-	};
-});
-
-// Now look at this net
-function net() { // that I just found!
-	// When I say go,
-	// be ready to throw!
-
-	// GO!
-	throw net;
-} // Throw it on him, not me!
-// Urgh, let's try somthing else
-
-function invite() {
-	client.generateInvite(['ADMINISTRATOR'])
-		.then(link => {
-			console.log(`invite link: ${link}`);
-		});
-}
-
-function DDwrapperMessage() {
-
-}
+	}
+})
