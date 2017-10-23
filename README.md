@@ -11,7 +11,9 @@ Then ```npm install ```
 ## Config.json
 ```json
 {
-  "token": "bottoken",
-  "commandPrefix": "..."
+  "token": "Bot_Token",
+  "commandPrefix": "...",
+  "chatlogidroom": "roomid",
+  "socketioserver": "socketioserver"
 }
 ```
