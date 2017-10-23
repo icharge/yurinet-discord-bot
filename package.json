@@ -1,6 +1,6 @@
 {
   "name": "yuribot-discord",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "YuriNET's Discord bot",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "discord.js": "^11.1.0",
     "erlpack": "github:hammerandchisel/erlpack",
     "node-opus": "^0.2.6",
+    "socket.io-client": "^2.0.3",
     "sodium": "^2.0.1",
     "uws": "^8.14.1"
   }
