@@ -118,11 +118,11 @@ socket.on('lobby.chat', function(response) {
   }
 
   function getchatmsg() {
-    return '```' + response.name + '```' + " : " + response.message
+    return '``' + response.name + '``' + " : " + response.message
   }
 
   function getchatformatdiscord() {
-    return '```' + getchatdaze() + " " + getchatintime() + "``` " +
+    return '``' + getchatdaze() + " " + getchatintime() + "`` " +
       getchatmsg()
   }
 
