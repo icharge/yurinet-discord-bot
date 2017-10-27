@@ -94,14 +94,10 @@ socket.on('lobby.chat', function(response) {
   let tempchatminutes = chatdetail.getMinutes();
   let tempchatseconds = chatdetail.getSeconds();
   let chatdate = (tempchatdate < 10) ? `0${tempchatdate}` : tempchatdate
-  let chatmonth = (tempchatmonth < 10) ? `0${tempchatmonth}` :
-    tempchatmonth
-  let chathours = (tempchathours < 10) ? `0${tempchathours}` :
-    tempchathours
-  let chatminutes = (tempchatminutes < 10) ? `0${tempchatminutes}` :
-    tempchatminutes
-  let chatseconds = (tempchatseconds < 10) ? `0${tempchatseconds}` :
-    tempchatseconds
+  let chatmonth = (tempchatmonth < 10) ? `0${tempchatmonth}` : tempchatmonth
+  let chathours = (tempchathours < 10) ? `0${tempchathours}` : tempchathours
+  let chatminutes = (tempchatminutes < 10) ? `0${tempchatminutes}` : tempchatminutes
+  let chatseconds = (tempchatseconds < 10) ? `0${tempchatseconds}` : tempchatseconds
 
   function getChatDate() {
     return chatdate + "/" + chatmonth + "/" + chatyear
@@ -116,13 +112,11 @@ socket.on('lobby.chat', function(response) {
   }
 
   function formatChatMessage() {
-    return '``' + getChatDate() + " " + getChatTime() + "`` " +
-      getchatmsg()
+    return '``' + getChatDate() + " " + getChatTime() + "`` " + getchatmsg()
   }
 
   function printDiscordChatMessage() {
-    return getChatDate() + " " + getChatTime() + " " + response.name +
-      " : " + response.message
+    return getChatDate() + " " + getChatTime() + " " + response.name + " : " + response.message
   }
   if (lastchat[response.name] === response.message) {
     console.log('spam')
