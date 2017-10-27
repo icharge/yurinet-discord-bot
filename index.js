@@ -24,12 +24,6 @@ client.on('ready', () => {
   replServer.context.client = client;
 });
 
-try {
-  client.login(config.token);
-} catch (e) {
-  console.log(e.stack)
-}
-
 client.on('message', async message => {
   if (message.author.bot) return
   let messageArray = message.content.split(/\s+/g);
@@ -109,11 +103,11 @@ socket.on('lobby.chat', function(response) {
   let chatseconds = (tempchatseconds < 10) ? `0${tempchatseconds}` :
     tempchatseconds
 
-  function getchatdaze() {
+  function getChatDate() {
     return chatdate + "/" + chatmonth + "/" + chatyear
   }
 
-  function getchatintime() {
+  function getChatTime() {
     return chathours + ":" + chatminutes + ":" + chatseconds
   }
 
@@ -121,13 +115,13 @@ socket.on('lobby.chat', function(response) {
     return '``' + response.name + '``' + " : " + response.message
   }
 
-  function getchatformatdiscord() {
-    return '``' + getchatdaze() + " " + getchatintime() + "`` " +
+  function formatChatMessage() {
+    return '``' + getChatDate() + " " + getChatTime() + "`` " +
       getchatmsg()
   }
 
-  function getchatformat() {
-    return getchatdaze() + " " + getchatintime() + " " + response.name +
+  function printDiscordChatMessage() {
+    return getChatDate() + " " + getChatTime() + " " + response.name +
       " : " + response.message
   }
   if (lastchat[response.name] === response.message) {
@@ -140,10 +134,17 @@ socket.on('lobby.chat', function(response) {
       configurable: true
     })
     //  console.log(lastchat)
-  chatlog.send(getchatformatdiscord())
+  chatlog.send(formatChatMessage())
     //  console.log(response)
-  console.log(getchatformat())
+  console.log(printDiscordChatMessage())
 });
 socket.on('disconnect', function() {
   console.log('socket.io-client is disconnected!');
 });
+
+//login
+try {
+  client.login(config.token);
+} catch (e) {
+  console.log(e.stack)
+}
