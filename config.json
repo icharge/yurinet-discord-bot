@@ -1,4 +1,6 @@
 {
   "token": "Bot_Token",
-  "commandPrefix": "..."
+  "commandPrefix": "...",
+  "chatlogidroom": "roomid",
+  "socketioserver": "socketioserver"
 }
