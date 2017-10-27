@@ -83,28 +83,25 @@ const socket = io(config.socketioserver, {
 socket.on('connect', function(socket) {
   console.log('socket.io-client is connected!');
 });
-let lastchat = {}
+let lastChat = {}
 socket.on('lobby.chat', function(response) {
   const chatlog = client.channels.get(config.chatlogidroom);
-  let chatdetail = new Date(response.timestamp);
-  let tempchatdate = chatdetail.getDate();
-  let tempchatmonth = chatdetail.getMonth() + 1;
-  let chatyear = chatdetail.getFullYear();
-  let tempchathours = chatdetail.getHours();
-  let tempchatminutes = chatdetail.getMinutes();
-  let tempchatseconds = chatdetail.getSeconds();
-  let chatdate = (tempchatdate < 10) ? `0${tempchatdate}` : tempchatdate
-  let chatmonth = (tempchatmonth < 10) ? `0${tempchatmonth}` : tempchatmonth
-  let chathours = (tempchathours < 10) ? `0${tempchathours}` : tempchathours
-  let chatminutes = (tempchatminutes < 10) ? `0${tempchatminutes}` : tempchatminutes
-  let chatseconds = (tempchatseconds < 10) ? `0${tempchatseconds}` : tempchatseconds
+  let ChatDetail = new Date(response.timestamp);
+  let tempChatDate = ChatDetail.getDate();
+  let tempChatMonth = ChatDetail.getMonth() + 1;
+  let chatYear = ChatDetail.getFullYear();
+  let tempChatHours = ChatDetail.getHours();
+  let tempChatMinutes = ChatDetail.getMinutes();
+  let tempChatSeconds = ChatDetail.getSeconds();
+  let chatDate = (tempChatDate < 10) ? `0${tempChatDate}` : tempChatDate
+  let chatMonth = (tempChatMonth < 10) ? `0${tempChatMonth}` : tempChatMonth
+  let chatHours = (tempChatHours < 10) ? `0${tempChatHours}` : tempChatHours
+  let chatMinutes = (tempChatMinutes < 10) ? `0${tempChatMinutes}` : tempChatMinutes
+  let chatSeconds = (tempChatSeconds < 10) ? `0${tempChatSeconds}` : tempChatSeconds
 
   function getChatDate() {
-    return chatdate + "/" + chatmonth + "/" + chatyear
-  }
-
-  function getChatTime() {
-    return chathours + ":" + chatminutes + ":" + chatseconds
+    return chatDate + "/" + chatMonth + "/" + chatYear +
+      " " + chatHours + ":" + chatMinutes + ":" + chatSeconds
   }
 
   function getchatmsg() {
@@ -112,22 +109,23 @@ socket.on('lobby.chat', function(response) {
   }
 
   function formatChatMessage() {
-    return '``' + getChatDate() + " " + getChatTime() + "`` " + getchatmsg()
+    return '``' + getChatDate() + "`` " + getchatmsg()
   }
 
   function printDiscordChatMessage() {
-    return getChatDate() + " " + getChatTime() + " " + response.name + " : " + response.message
+    return getChatDate() + " " + response.name + " : " + response.message
   }
-  if (lastchat[response.name] === response.message) {
+
+  if (lastChat[response.name] === response.message) {
     console.log('spam')
     return
   }
-  Object.defineProperty(lastchat, response.name, {
+  Object.defineProperty(lastChat, response.name, {
       value: response.message,
       writable: true,
       configurable: true
     })
-    //  console.log(lastchat)
+    //  console.log(lastChat)
   chatlog.send(formatChatMessage())
     //  console.log(response)
   console.log(printDiscordChatMessage())
