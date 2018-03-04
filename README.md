@@ -13,7 +13,7 @@ install requirements
 
 Windows: ``npm install --global windows-build-tools`` With administrator permissions.
 
-Linux: get ``build-essential`` ``libtool`` ``libtool-bin`` ``autoconf`` ``automakeand`` ``ffmpeg`` and python 2.7 installed
+Linux: get ``build-essential`` ``libtool`` ``libtool-bin`` ``autoconf`` ``automake`` ``ffmpeg`` and python 2.7 installed
 
 Then ```npm install ```
 
