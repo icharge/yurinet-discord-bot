@@ -11,9 +11,9 @@ const Discord = require('discord.js');
 const client = new Discord.Client({
   autoReconnect: true
 });
-let yurinetEmbed = new Discord.RichEmbed()
-let gameEmbed = new Discord.RichEmbed()
-let DDwrapperEmbed = new Discord.RichEmbed()
+let yurinetEmbed = new Discord.RichEmbed();
+let gameEmbed = new Discord.RichEmbed();
+let DDwrapperEmbed = new Discord.RichEmbed();
 
 // Import config
 let config = require('./config.json');
@@ -21,8 +21,8 @@ let prefix = config.commandPrefix;
 const chatlog = client.channels.get(config.chatlogidroom);
 
 // Import Music controller
-const musiccontroller = require('./music/musiccontroller.js')
-const music = new musiccontroller(client)
+const musiccontroller = require('./music/musiccontroller.js');
+const music = new musiccontroller(client);
 
 //bot
 client.on('guildMemberAdd', member => {
@@ -42,15 +42,14 @@ client.once('ready', () => {
       "http://play.thaira2.com/download/yn0910_setup.exe")
     .addField("เล่นออน์ไลน์ ด้วย yurinet",
       "ติดตั้งโปรแกรม สมัคร ตั้งค่า แล้วไปลุยกันได้เลย")
-    .setFooter("**แมว")
-
+    .setFooter("**แมว");
   gameEmbed.setAuthor(client.user.username, client.user.avatarURL)
     .setColor("#EE82EE")
     .addField("Download",
       "http://www.thaira2.com/download.html")
     .addField("ตัวเกม red alert 2 yuri revenge",
       "เลือก link โหลดตัวเกมเพียง link เดี่ยว")
-    .setFooter("**แมว")
+    .setFooter("**แมว");
   DDwrapperEmbed.setAuthor(client.user.username, client.user.avatarURL)
     .setColor("#EE82EE")
     .addField("Download",
@@ -63,8 +62,8 @@ client.once('ready', () => {
 });
 
 client.on('message', async message => {
-  if (message.author.bot) return
-  if (message.channel.type != "text") return
+  if (message.author.bot) return;
+  if (message.channel.type != "text") return;
   let messageArray = message.content.split(/\s+/g);
   let command = messageArray[0];
   if (command.startsWith(prefix)) {
@@ -84,19 +83,19 @@ client.on('message', async message => {
         embed: gameEmbed
       });
     };
-  }
-})
+  };
+});
 
 //Game chat
 console.log('socket.io-client is running');
-const io = require('socket.io-client')
+const io = require('socket.io-client');
 const socket = io(config.socketioserver, {
   reconnect: true
 });
 socket.on('connect', function(socket) {
   console.log('socket.io-client is connected!');
 });
-let lastChat = {}
+let lastChat = {};
 socket.on('lobby.chat', async function(response) {
   let ChatDetail = new Date(response.timestamp);
   let tempChatDate = ChatDetail.getDate();
@@ -105,42 +104,42 @@ socket.on('lobby.chat', async function(response) {
   let tempChatHours = ChatDetail.getHours();
   let tempChatMinutes = ChatDetail.getMinutes();
   let tempChatSeconds = ChatDetail.getSeconds();
-  let chatDate = (tempChatDate < 10) ? `0${tempChatDate}` : tempChatDate
-  let chatMonth = (tempChatMonth < 10) ? `0${tempChatMonth}` : tempChatMonth
-  let chatHours = (tempChatHours < 10) ? `0${tempChatHours}` : tempChatHours
-  let chatMinutes = (tempChatMinutes < 10) ? `0${tempChatMinutes}` : tempChatMinutes
-  let chatSeconds = (tempChatSeconds < 10) ? `0${tempChatSeconds}` : tempChatSeconds
+  let chatDate = (tempChatDate < 10) ? `0${tempChatDate}` : tempChatDate;
+  let chatMonth = (tempChatMonth < 10) ? `0${tempChatMonth}` : tempChatMonth;
+  let chatHours = (tempChatHours < 10) ? `0${tempChatHours}` : tempChatHours;
+  let chatMinutes = (tempChatMinutes < 10) ? `0${tempChatMinutes}` : tempChatMinutes;
+  let chatSeconds = (tempChatSeconds < 10) ? `0${tempChatSeconds}` : tempChatSeconds;
 
   function getChatDate() {
     return chatDate + "/" + chatMonth + "/" + chatYear +
-      " " + chatHours + ":" + chatMinutes + ":" + chatSeconds
-  }
+      " " + chatHours + ":" + chatMinutes + ":" + chatSeconds;
+  };
 
   function getchatmsg() {
-    return '``' + response.name + '``' + " : " + response.message
-  }
+    return '``' + response.name + '``' + " : " + response.message;
+  };
 
   function formatChatMessage() {
-    return '``' + getChatDate() + "`` " + getchatmsg()
-  }
+    return '``' + getChatDate() + "`` " + getchatmsg();
+  };
 
   function printDiscordChatMessage() {
-    return getChatDate() + " " + response.name + " : " + response.message
-  }
+    return getChatDate() + " " + response.name + " : " + response.message;
+  };
 
   if (lastChat[response.name] === response.message) {
-    console.log('spam')
-    return
-  }
+    console.log('spam');
+    return;
+  };
   Object.defineProperty(lastChat, response.name, {
     value: response.message,
     writable: true,
     configurable: true
-  })
-  //  console.log(lastChat)
-  chatlog.send(formatChatMessage())
-  //  console.log(response)
-  console.log(printDiscordChatMessage())
+  });
+  //  console.log(lastChat);
+  chatlog.send(formatChatMessage());
+  //  console.log(response);
+  console.log(printDiscordChatMessage());
 });
 socket.on('disconnect', function() {
   console.log('socket.io-client is disconnected!');
@@ -150,5 +149,5 @@ socket.on('disconnect', function() {
 try {
   client.login(config.token);
 } catch (e) {
-  console.log(e)
-}
+  console.log(e);
+};

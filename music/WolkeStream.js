@@ -16,14 +16,14 @@ class WolkeStream {
     this.url = url;
     this.request(url, 0);
     return this.output;
-  }
+  };
 
   request(url, length) {
     const options = typeof url === 'string' ? URL.parse(url) : url;
     if (!options.headers) options.headers = {};
     if (length > 0) {
       options.headers.Range = `bytes=${length}-`;
-    }
+    };
     if (options.protocol === 'https:') {
       let req = https.get(options, (res) => {
         this.processRes(req, res);
@@ -32,8 +32,8 @@ class WolkeStream {
       let req = http.get(options, (res) => {
         this.processRes(req, res);
       });
-    }
-  }
+    };
+  };
 
   processRes(req, res) {
     if (this.done === 0) this.total = Number(res.headers['content-length']);
@@ -46,7 +46,7 @@ class WolkeStream {
         res.removeAllListeners();
         req.removeAllListeners();
         return this.request(this.url, this.done);
-      }
+      };
     });
     res.on('data', (chunk) => {
       // if (!chunk) {
@@ -75,7 +75,7 @@ class WolkeStream {
         res.removeAllListeners();
         req.removeAllListeners();
         return this.request(this.url, this.done);
-      }
+      };
     });
     res.on('end', () => {
       // console.log('res end');
@@ -89,11 +89,11 @@ class WolkeStream {
         res.removeAllListeners();
         req.removeAllListeners();
         this.output.end();
-      }
+      };
     });
     res.pipe(this.output, {
       end: false
     });
-  }
-}
+  };
+};
 module.exports = WolkeStream;
