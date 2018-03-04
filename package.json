@@ -14,6 +14,10 @@
     "url": "git+https://github.com/icharge/yurinet-discord-bot.git"
   },
   "author": "Norrapat Nimmanee <charge_n@hotmail.com>",
+  "contributors": [
+    "Norrapat Nimmanee <charge_n@hotmail.com>",
+    "Passawat Noraman <naiwheatleyth@outlook.com>"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/icharge/yurinet-discord-bot/issues"
