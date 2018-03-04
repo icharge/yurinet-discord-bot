@@ -151,18 +151,18 @@ module.exports = function(client) {
       }
       messageArray.shift()
       let query = messageArray.join(" ")
+      if (!query.length) {
+        message.reply('กรุณาใส่ข้อความ').then(calmsg => {
+          calmsg.delete(10000)
+        });
+        return
+      }
       let checkvideoid = await checker.check(query)
       if (checkvideoid) {
         let songobj = await youtuberesolver.resolve(message, checkvideoid);
         controller.addsong(message, songobj);
         return
       } else {
-        if (!query.length) {
-          message.reply('กรุณาใส่ข้อความ').then(calmsg => {
-            calmsg.delete(10000)
-          });
-          return
-        }
         try {
           search.search(message, query).then(async function(songid) {
             let songobj = await youtuberesolver.resolve(message, songid)
