@@ -11,7 +11,6 @@ module.exports = function(client) {
     constructor(client) {
       this.client = client;
       this.connection = [];
-      this.StreamDispatcher = [];
       this.autoLeaveTimeout = [];
       this.isplaying = [];
       this.configfristtime = [];
@@ -89,10 +88,10 @@ module.exports = function(client) {
             return;
           };
         };
-        this.StreamDispatcher[guildid] = connection.playStream(link, options);
-        this.StreamDispatcher[guildid].once('end', () => {
+        connection.playStream(link, options);
+        connection.dispatcher.once('end', () => {
           queuelist.removefrist(msg);
-          this.StreamDispatcher[guildid].removeAllListeners();
+          //connection.dispatcher.removeAllListeners();
           setTimeout(() => {
             this.addsong(msg);
           }, 1000);
@@ -104,7 +103,7 @@ module.exports = function(client) {
             };
           }, 1000 * 60 * 1); // 10 Minutes 1000 * 60 * 10
         });
-        this.StreamDispatcher[guildid].once('error', (err) => {
+        connection.dispatcher.once('error', (err) => {
           setTimeout(() => {
             this.addsong(msg);
           }, 1000);
@@ -181,7 +180,7 @@ module.exports = function(client) {
       };
       let guildid = message.guild.id;
       try {
-        await controller.StreamDispatcher[guildid].end();
+        await controller.connection[guildid].connection.dispatcher.end();
       } catch (e) {
         console.log(e);
       };

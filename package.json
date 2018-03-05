@@ -1,6 +1,6 @@
 {
   "name": "yuribot-discord",
-  "version": "1.3.0-Music",
+  "version": "1.3.1-Music",
   "description": "YuriNET's Discord bot",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "axios": "^0.18.0",
     "bluebird": "^3.5.1",
     "bufferutil": "^3.0.3",
-    "discord.js": "^11.3.1",
+    "discord.js": "^11.3.2",
     "erlpack": "github:discordapp/erlpack",
     "ffmpeg-binaries": "^3.2.2",
     "node-opus": "^0.2.7",
