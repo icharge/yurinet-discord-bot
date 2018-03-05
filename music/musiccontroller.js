@@ -180,7 +180,7 @@ module.exports = function(client) {
       };
       let guildid = message.guild.id;
       try {
-        await controller.connection[guildid].connection.dispatcher.end();
+        controller.connection[guildid].connection.dispatcher.end();
       } catch (e) {
         console.log(e);
       };
