@@ -74,7 +74,7 @@ module.exports = function(client) {
       this.isplaying[guildid] = true;
       clearTimeout(this.autoLeaveTimeout[guildid]);
       let options = {
-        volume: 0.1
+        volume: 0.2
       };
       if (connection && Song) {
         let link;
