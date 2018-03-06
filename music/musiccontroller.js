@@ -15,6 +15,7 @@ module.exports = function(client) {
       this.isplaying = [];
       this.configfristtime = [];
     };
+
     async addsong(msg, song) {
       let guildid = msg.guild.id;
       if (!this.isplaying[guildid]) {
@@ -25,15 +26,17 @@ module.exports = function(client) {
         msg.channel.send("``" + song.title + "`` เพื่มลงในคิวแล้ว.").then(calmsg => {
           calmsg.delete(10000);
         });
-      };
-      await this.voicejoin(msg);
-      if (!this.isplaying[guildid]) {
+        if (!this.isplaying[guildid]) {
+          await this.voicejoin(msg);
+          this.isplaying[guildid] = true;
+          this.play(msg, this.connection[guildid].connection, queuelist.list[guildid]['song'][0]);
+        };
+      } else {
         if (!queuelist.list[guildid]['song'][0]) {
           this.isplaying[guildid] = false;
           return;
         };
         this.play(msg, this.connection[guildid].connection, queuelist.list[guildid]['song'][0]);
-        return;
       };
     };
 
@@ -88,10 +91,11 @@ module.exports = function(client) {
             return;
           };
         };
-        connection.playStream(link, options);
-        connection.dispatcher.once('end', () => {
+        let dispatcher = connection.playStream(link, options);
+        dispatcher.setMaxListeners(20);
+        dispatcher.once('end', () => {
           queuelist.removefrist(msg);
-          //connection.dispatcher.removeAllListeners();
+          //dispatcher.removeAllListeners();
           setTimeout(() => {
             this.addsong(msg);
           }, 1000);
@@ -103,7 +107,7 @@ module.exports = function(client) {
             };
           }, 1000 * 60 * 1); // 10 Minutes 1000 * 60 * 10
         });
-        connection.dispatcher.once('error', (err) => {
+        dispatcher.once('error', (err) => {
           setTimeout(() => {
             this.addsong(msg);
           }, 1000);
@@ -122,11 +126,6 @@ module.exports = function(client) {
   };
 
   const controller = new musiccontroller(client);
-  client.on("ready", () => {
-    client.user.setActivity("YURI", {
-      type: "LISTENING"
-    });
-  });
 
   client.on('message', async message => {
     if (message.author.bot) return;
