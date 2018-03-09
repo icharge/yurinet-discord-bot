@@ -31,6 +31,9 @@ client.on('guildMemberAdd', member => {
 
 client.once('ready', () => {
   console.log('Im ready!');
+  client.user.setActivity("YURI", {
+    type: "LISTENING"
+  });
   var replServer = repl.start({
     prompt: 'YuriBot > ',
   });
