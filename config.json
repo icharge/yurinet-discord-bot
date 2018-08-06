@@ -1,6 +1,6 @@
 {
-  "token": "Bot_Token",
-  "commandPrefix": "...",
+  "token": "BotToken",
+  "commandPrefix": "!",
   "chatlogidroom": "roomid",
   "socketioserver": "socketioserver",
   "youtubeAPI": "youtubeAPIKEY"

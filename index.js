@@ -5,7 +5,6 @@
 */
 // Import REPL for prompt
 const repl = require('repl');
-
 // Import the discord.js module
 const Discord = require('discord.js');
 const client = new Discord.Client({
@@ -21,17 +20,20 @@ let prefix = config.commandPrefix;
 const chatlog = client.channels.get(config.chatlogidroom);
 
 // Import Music controller
-const musiccontroller = require('./music/musiccontroller.js');
-const music = new musiccontroller(client);
+const musiccontrollersrc = require('./musicmodules/musiccontroller');
+const musicontroller = new musiccontrollersrc(client, prefix);
+
+// Import Time Module
+const datetime = require("./modules/dateNtime")
 
 //bot
-client.on('guildMemberAdd', member => {
+client.on('guildMemberAdd', async (member) => {
   console.log(`${member} Has join ${member.guild.name} server.`);
 });
 
 client.once('ready', () => {
   console.log('Im ready!');
-  client.user.setActivity("YURI", {
+  client.user.setActivity("ENERMY", {
     type: "LISTENING"
   });
   var replServer = repl.start({
@@ -56,36 +58,65 @@ client.once('ready', () => {
   DDwrapperEmbed.setAuthor(client.user.username, client.user.avatarURL)
     .setColor("#EE82EE")
     .addField("Download",
-      "https://drive.google.com/file/d/0B0ELu66No5j9SGpONERnUFFUTHM/view"
+      "ดูได้ที่ห้อง <#340534866116608000>"
     )
     .addField("แก้อาการกระตุก หรือ มองไม่เห็นเมนู",
-      "โหลด DDwrapper แล้วนำ 2 ไฟล์ไปลงที่แฟ้มเกมลงแบบเหมือนลงม็อดเกม Yuri"
+      "โหลด DDRAW.DLL แล้วนำไฟล์ไปลงที่แฟ้มเกมลงแบบเหมือนลงม็อดเกม Yuri"
     )
-    .setFooter("**ถ้าไม่ทำงานแสดงว่าคุณลงผิดที่ ลองลงใหม่")
+    .setFooter("**ถ้าไม่ทำงานแสดงว่าคุณลงผิดที่ ลองลงใหม่");
 });
 
-client.on('message', async message => {
+client.on('message', async (message) => {
   if (message.author.bot) return;
-  if (message.channel.type != "text") return;
+  if (message.channel.type !== "text") return;
   let messageArray = message.content.split(/\s+/g);
-  let command = messageArray[0];
-  if (command.startsWith(prefix)) {
-    let cmd = command.slice(prefix.length);
-    if (cmd === "ddraw") {
-      message.channel.send({
-        embed: DDwrapperEmbed
-      });
-    };
-    if (cmd === "yurinet") {
-      message.channel.send({
-        embed: yurinetEmbed
-      });
-    };
-    if (cmd === "game") {
-      message.channel.send({
-        embed: gameEmbed
-      });
-    };
+  if (!messageArray[0].startsWith(prefix)) return;
+  let cmd = messageArray[0].slice(prefix.length).toLowerCase();
+  let cmd = command.slice(prefix.length);
+  if (cmd === "ddraw") {
+    message.channel.send({
+      embed: DDwrapperEmbed
+    });
+    return;
+  };
+  if (cmd === "yurinet") {
+    message.channel.send({
+      embed: yurinetEmbed
+    });
+    return;
+  };
+  if (cmd === "game") {
+    message.channel.send({
+      embed: gameEmbed
+    });
+    return;
+  };
+
+  //music module
+  if (cmd === "play") {
+    message.delete();
+    messageArray.shift();
+    let query = messageArray.join(" ");
+    musicontroller.asksong(message, query);
+    return;
+  };
+  if (cmd === "queue") {
+    message.delete();
+    musicontroller.checkafkbot(message);
+    musicontroller.showqueue(message);
+    return;
+  };
+  if (cmd === "stop") {
+    message.delete();
+    musicontroller.checkafkbot(message);
+    musicontroller.stop(message);
+    return;
+  };
+  if (cmd === "skip") {
+    message.delete();
+    musicontroller.checkafkbot(message);
+    musicontroller.skip(message);
+    return;
   };
 });
 
@@ -95,43 +126,27 @@ const io = require('socket.io-client');
 const socket = io(config.socketioserver, {
   reconnect: true
 });
-socket.on('connect', function(socket) {
+socket.on('connect', () => {
   console.log('socket.io-client is connected!');
 });
 let lastChat = {};
-socket.on('lobby.chat', async function(response) {
-  let ChatDetail = new Date(response.timestamp);
-  let tempChatDate = ChatDetail.getDate();
-  let tempChatMonth = ChatDetail.getMonth() + 1;
-  let chatYear = ChatDetail.getFullYear();
-  let tempChatHours = ChatDetail.getHours();
-  let tempChatMinutes = ChatDetail.getMinutes();
-  let tempChatSeconds = ChatDetail.getSeconds();
-  let chatDate = (tempChatDate < 10) ? `0${tempChatDate}` : tempChatDate;
-  let chatMonth = (tempChatMonth < 10) ? `0${tempChatMonth}` : tempChatMonth;
-  let chatHours = (tempChatHours < 10) ? `0${tempChatHours}` : tempChatHours;
-  let chatMinutes = (tempChatMinutes < 10) ? `0${tempChatMinutes}` : tempChatMinutes;
-  let chatSeconds = (tempChatSeconds < 10) ? `0${tempChatSeconds}` : tempChatSeconds;
-
-  function getChatDate() {
-    return chatDate + "/" + chatMonth + "/" + chatYear +
-      " " + chatHours + ":" + chatMinutes + ":" + chatSeconds;
-  };
+socket.on('lobby.chat', async (response) => {
+  let ChatDate = datetime(response.timestamp);
 
   function getchatmsg() {
     return '``' + response.name + '``' + " : " + response.message;
   };
 
   function formatChatMessage() {
-    return '``' + getChatDate() + "`` " + getchatmsg();
+    return '``' + ChatDate + "`` " + getchatmsg();
   };
 
   function printDiscordChatMessage() {
-    return getChatDate() + " " + response.name + " : " + response.message;
+    return `${ChatDate} ${response.name} : ${response.message}`;
   };
 
   if (lastChat[response.name] === response.message) {
-    console.log('spam');
+    //console.log('spam');
     return;
   };
   Object.defineProperty(lastChat, response.name, {
@@ -139,16 +154,13 @@ socket.on('lobby.chat', async function(response) {
     writable: true,
     configurable: true
   });
-  //  console.log(lastChat);
   chatlog.send(formatChatMessage());
-  //  console.log(response);
   console.log(printDiscordChatMessage());
 });
-socket.on('disconnect', function() {
+socket.on('disconnect', () => {
   console.log('socket.io-client is disconnected!');
 });
 
-//login
 try {
   client.login(config.token);
 } catch (e) {

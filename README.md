@@ -1,8 +1,8 @@
 # yurinet-discord-bot
-A Discord bot for **Yurinet server** that are still in development.
+A Discord bot for **Yurinet Server** that are still in development.
 
 ## Requirements:
-* Node >= 8.9.4
+* Node >= 8.0.0
 * NPM
 * Git
 * ffmpeg
@@ -11,17 +11,17 @@ A Discord bot for **Yurinet server** that are still in development.
 ## Installation
 install requirements
 
-Windows: ``npm install --global windows-build-tools`` With administrator permissions.
+Windows: Run ``npm install --global --production windows-build-tools`` in an admin command prompt or PowerShell and then install python 2.7 and ffmpeg.
 
-Linux: get ``build-essential`` ``libtool`` ``libtool-bin`` ``autoconf`` ``automake`` ``ffmpeg`` and python 2.7 installed
+Linux: ``sudo apt install build-essential libtool libtool-bin autoconf automake ffmpeg python2.7``
 
 Then ```npm install ```
 
 ## Config.json
 ```json
 {
-  "token": "Bot_Token",
-  "commandPrefix": "...",
+  "token": "BotToken",
+  "commandPrefix": "!",
   "chatlogidroom": "roomid",
   "socketioserver": "socketioserver",
   "youtubeAPI": "youtubeAPIKEY"
