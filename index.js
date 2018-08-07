@@ -10,21 +10,21 @@ const Discord = require('discord.js');
 const client = new Discord.Client({
   autoReconnect: true
 });
-let yurinetEmbed = new Discord.RichEmbed();
-let gameEmbed = new Discord.RichEmbed();
-let DDwrapperEmbed = new Discord.RichEmbed();
-
 // Import config
 let config = require('./config.json');
 let prefix = config.commandPrefix;
 const chatlog = client.channels.get(config.chatlogidroom);
-
 // Import Music controller
-const musiccontrollersrc = require('./musicmodules/musiccontroller');
-const musicontroller = new musiccontrollersrc(client, prefix);
-
+const musicControllerSrc = require('./musicmodules/musiccontroller');
+const musicController = new musicControllerSrc();
 // Import Time Module
-const datetime = require("./modules/dateNtime")
+const datetime = require("./modules/dateNtime");
+// embed
+const embed = {
+  yurinet: new Discord.RichEmbed(),
+  ddraw: new Discord.RichEmbed(),
+  game: new Discord.RichEmbed()
+};
 
 //bot
 client.on('guildMemberAdd', async (member) => {
@@ -41,21 +41,21 @@ client.once('ready', () => {
   });
   replServer.context.client = client;
 
-  yurinetEmbed.setAuthor(client.user.username, client.user.avatarURL)
+  embed[yurinet].setAuthor(client.user.username, client.user.avatarURL)
     .setColor("#EE82EE")
     .addField("Download",
       "http://play.thaira2.com/download/yn0910_setup.exe")
     .addField("เล่นออน์ไลน์ ด้วย yurinet",
       "ติดตั้งโปรแกรม สมัคร ตั้งค่า แล้วไปลุยกันได้เลย")
     .setFooter("**แมว");
-  gameEmbed.setAuthor(client.user.username, client.user.avatarURL)
+  embed[game].setAuthor(client.user.username, client.user.avatarURL)
     .setColor("#EE82EE")
     .addField("Download",
       "http://www.thaira2.com/download.html")
     .addField("ตัวเกม red alert 2 yuri revenge",
       "เลือก link โหลดตัวเกมเพียง link เดี่ยว")
     .setFooter("**แมว");
-  DDwrapperEmbed.setAuthor(client.user.username, client.user.avatarURL)
+  embed[ddraw].setAuthor(client.user.username, client.user.avatarURL)
     .setColor("#EE82EE")
     .addField("Download",
       "ดูได้ที่ห้อง <#340534866116608000>"
@@ -63,61 +63,55 @@ client.once('ready', () => {
     .addField("แก้อาการกระตุก หรือ มองไม่เห็นเมนู",
       "โหลด DDRAW.DLL แล้วนำไฟล์ไปลงที่แฟ้มเกมลงแบบเหมือนลงม็อดเกม Yuri"
     )
+    .addField("DDRAW ที่แนะนำ",
+      "DDrawCompat หรือ narzoul ddraw"
+    )
     .setFooter("**ถ้าไม่ทำงานแสดงว่าคุณลงผิดที่ ลองลงใหม่");
 });
 
 client.on('message', async (message) => {
   if (message.author.bot) return;
   if (message.channel.type !== "text") return;
-  let messageArray = message.content.split(/\s+/g);
+  const messageArray = message.content.split(/\s+/g);
   if (!messageArray[0].startsWith(prefix)) return;
   let cmd = messageArray[0].slice(prefix.length).toLowerCase();
-  let cmd = command.slice(prefix.length);
-  if (cmd === "ddraw") {
+  let checkembed = (cmd) => {
+    let list = ["ddraw", "yurinet", "game"];
+    return list.filter(x => x === cmd).length ? true : false;
+  };
+  if (checkembed) {
     message.channel.send({
-      embed: DDwrapperEmbed
+      embed: embed[cmd]
     });
     return;
-  };
-  if (cmd === "yurinet") {
-    message.channel.send({
-      embed: yurinetEmbed
-    });
-    return;
-  };
-  if (cmd === "game") {
-    message.channel.send({
-      embed: gameEmbed
-    });
-    return;
-  };
+  }
 
   //music module
   if (cmd === "play") {
     message.delete();
     messageArray.shift();
     let query = messageArray.join(" ");
-    musicontroller.asksong(message, query);
+    musicController.asksong(message, query);
     return;
-  };
+  }
   if (cmd === "queue") {
     message.delete();
-    musicontroller.checkafkbot(message);
-    musicontroller.showqueue(message);
+    musicController.checkafkbot(message);
+    musicController.showqueue(message);
     return;
-  };
+  }
   if (cmd === "stop") {
     message.delete();
-    musicontroller.checkafkbot(message);
-    musicontroller.stop(message);
+    musicController.checkafkbot(message);
+    musicController.stop(message);
     return;
-  };
+  }
   if (cmd === "skip") {
     message.delete();
-    musicontroller.checkafkbot(message);
-    musicontroller.skip(message);
+    musicController.checkafkbot(message);
+    musicController.skip(message);
     return;
-  };
+  }
 });
 
 //Game chat
@@ -132,30 +126,21 @@ socket.on('connect', () => {
 let lastChat = {};
 socket.on('lobby.chat', async (response) => {
   let ChatDate = datetime(response.timestamp);
-
-  function getchatmsg() {
-    return '``' + response.name + '``' + " : " + response.message;
-  };
-
-  function formatChatMessage() {
-    return '``' + ChatDate + "`` " + getchatmsg();
-  };
-
-  function printDiscordChatMessage() {
-    return `${ChatDate} ${response.name} : ${response.message}`;
-  };
+  let ChatForm = '``' + response.name + '``' + " : " + response.message;
+  let formatChatMessage = '``' + ChatDate + "`` " + ChatForm;
+  let chatconsolelog = `${ChatDate} ${response.name} : ${response.message}`;
 
   if (lastChat[response.name] === response.message) {
     //console.log('spam');
     return;
-  };
+  }
   Object.defineProperty(lastChat, response.name, {
     value: response.message,
     writable: true,
     configurable: true
   });
-  chatlog.send(formatChatMessage());
-  console.log(printDiscordChatMessage());
+  chatlog.send(formatChatMessage);
+  console.log(chatconsolelog);
 });
 socket.on('disconnect', () => {
   console.log('socket.io-client is disconnected!');

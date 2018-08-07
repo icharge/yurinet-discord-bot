@@ -5,12 +5,8 @@ const search = require("./search.js");
 const checker = require("./checker.js");
 const EventEmitter = require('eventemitter3');
 class musiccontroller extends EventEmitter {
-    constructor(client, prefix) {
+    constructor() {
         super();
-        this.client = client;
-        this.prefix = prefix;
-        this.client = client;
-        this.prefix = prefix;
         this.connection = {};
         this.autoLeaveTimeout = [];
         this.isplaying = {};
