@@ -14,4 +14,4 @@ module.exports = (date) => {
     return chatDate + "/" + chatMonth + "/" + chatYear +
         " " + chatHours + ":" + chatMinutes + ":" + chatSeconds;
 
-}
+};

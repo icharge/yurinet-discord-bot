@@ -20,7 +20,7 @@ const musicController = new musicControllerSrc();
 // Import Time Module
 const datetime = require("./modules/dateNtime");
 // embed
-const yurinet, ddraw, game = new Discord.RichEmbed();
+let yurinet, ddraw, game = new Discord.RichEmbed();
 //bot
 client.on('guildMemberAdd', async (member) => {
   console.log(`${member} Has join ${member.guild.name} server.`);
@@ -99,7 +99,7 @@ client.on('message', async (message) => {
     message.delete();
     musicController.checkafkbot(message);
     musicController.skip(message);
-  };
+  }
   return;
 });
 
@@ -139,4 +139,4 @@ try {
   client.login(config.token);
 } catch (e) {
   console.log(e);
-};
+}

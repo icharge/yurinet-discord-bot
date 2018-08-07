@@ -10,13 +10,13 @@ class musiccontroller extends EventEmitter {
         this.connection = {};
         this.autoLeaveTimeout = [];
         this.isplaying = {};
-    };
+    }
     async addsong(msg, song) {
         this.cleartime(msg);
         let guildid = msg.guild.id;
         if (!this.isplaying[guildid]) {
             this.isplaying[guildid] = false;
-        };
+        }
         if (song) {
             console.log(`${msg.guild.name}|${msg.member.displayName}|${msg.author.id} requested song ${song.title}`);
             queue.add(msg, song);
@@ -26,16 +26,16 @@ class musiccontroller extends EventEmitter {
             if (!this.isplaying[guildid]) {
                 this.isplaying[guildid] = true;
                 this.play(msg, this.connection[guildid], queue.list[guildid]["song"][0]);
-            };
+            }
         } else {
             if (!queue.list[guildid]["song"][0]) {
                 this.isplaying[guildid] = false;
                 this.settime(msg);
                 return;
-            };
+            }
             this.play(msg, this.connection[guildid], queue.list[guildid]["song"][0]);
-        };
-    };
+        }
+    }
 
     async play(msg, connection, Song) {
         let options = {
@@ -53,11 +53,11 @@ class musiccontroller extends EventEmitter {
                         this.addsong(msg);
                     }, 1000);
                     return;
-                };
+                }
             } else {
                 msg.channel.send("ERROR");
                 return;
-            };
+            }
             let dispatcher = connection.playStream(Wolke, options);
             dispatcher.setMaxListeners(20);
             dispatcher.once("end", () => {
@@ -80,13 +80,13 @@ class musiccontroller extends EventEmitter {
                 this.addsong(msg);
             }, 1000);
             return;
-        };
-    };
+        }
+    }
 
     async cleartime(msg) {
         let guildid = msg.guild.id;
         clearTimeout(this.autoLeaveTimeout[guildid]);
-    };
+    }
 
     async settime(msg) {
         let guildid = msg.guild.id;
@@ -96,17 +96,17 @@ class musiccontroller extends EventEmitter {
                 this.isplaying[guildid] = false;
             } catch (e) {
                 //console.error(e);
-            };
+            }
         }, 1000 * 60 * 1); // 10 Minutes 1000 * 60 * 10
-    };
+    }
 
     async checkafkbot(msg) {
         let guildid = msg.guild.id;
         if (!this.isplaying[guildid]) {
             this.cleartime(msg);
             this.settime(msg);
-        };
-    };
+        }
+    }
 
     async stop(msg) {
         let guildid = msg.guild.id;
@@ -116,11 +116,11 @@ class musiccontroller extends EventEmitter {
             this.connection[guildid].dispatcher.end();
         } catch (e) {
             //console.log(e);
-        };
+        }
         msg.channel.send("หยุดเล่นแล้ว").then(calmsg => {
             calmsg.delete(10000);
-        }).catch(e => {});
-    };
+        }).catch(() => {});
+    }
 
     async showqueue(msg) {
         try {
@@ -128,42 +128,42 @@ class musiccontroller extends EventEmitter {
         } catch (e) {
             msg.channel.send("ไม่มีเพลงที่กำลังเล่น").then(calmsg => {
                 calmsg.delete(10000);
-            }).catch(e => {});
+            }).catch(() => {});
             return;
-        };
+        }
         let queuelist = queue.showlist(msg);
         if (queuelist.length === 0) {
             msg.channel.send("ไม่มีเพลงที่กำลังเล่น").then(calmsg => {
                 calmsg.delete(10000);
-            }).catch(e => {});
+            }).catch(() => {});
             return;
-        };
+        }
         let queuelists = "";
         for (var i = 0; i < queuelist.length; i++) {
             queuelists += `${i + 1}. ` + queuelist[i].title + "\r\n";
-        };
+        }
         let chatformat = "กำลังเล่นเพลงตามลำดับ\r\n" + queuelists;
         msg.channel.send(chatformat).then(calmsg => {
             calmsg.delete(10000);
-        }).catch(e => {});
+        }).catch(() => {});
         return;
-    };
+    }
     async skip(msg) {
         let guildid = msg.guild.id;
         msg.reply("กำลังข้าม").then(calmsg => {
             calmsg.delete(10000);
-        }).catch(e => {});
-        console.log(`${message.guild.name}|${message.author.id} call skip music`);
+        }).catch(() => {});
+        console.log(`${msg.guild.name}|${msg.author.id} call skip music`);
         try {
             this.connection[guildid].dispatcher.end();
         } catch (e) {
-            //console.log(e);
-        };
-    };
+            console.log(e);
+        }
+    }
     async voiceadapter(msg, voicecon) {
         let guildid = msg.guild.id;
         this.connection[guildid] = voicecon;
-    };
+    }
     async asksong(msg, query) {
         this.cleartime(msg);
         if (msg.member.voiceChannel) {
@@ -171,17 +171,17 @@ class musiccontroller extends EventEmitter {
         } else {
             msg.reply("คุณต้องเข้าห้อง voice").then(calmsg => {
                 calmsg.delete(10000);
-            }).catch(e => {});
+            }).catch(() => {});
             this.checkafkbot(msg);
             return;
-        };
+        }
         if (!query.length) {
             msg.reply("กรุณาใส่ข้อความ").then(calmsg => {
                 calmsg.delete(10000);
-            }).catch(e => {});
-            this.checkafkbot(message);
+            }).catch(() => {});
+            this.checkafkbot(msg);
             return;
-        };
+        }
         let checkvideoid = await checker.check(query);
         if (checkvideoid) {
             youtuberesolver.resolve(msg, checkvideoid).then(songobj => {
@@ -196,7 +196,7 @@ class musiccontroller extends EventEmitter {
                 if (!songid) {
                     this.checkafkbot(msg);
                     return;
-                };
+                }
                 youtuberesolver.resolve(msg, songid).then(songobj => {
                     this.addsong(msg, songobj);
                 }).catch(rej => {
@@ -205,9 +205,9 @@ class musiccontroller extends EventEmitter {
                 return;
             } catch (e) {
                 console.log(e);
-            };
-        };
+            }
+        }
         return;
-    };
-};
+    }
+}
 module.exports = musiccontroller;
