@@ -20,12 +20,7 @@ const musicController = new musicControllerSrc();
 // Import Time Module
 const datetime = require("./modules/dateNtime");
 // embed
-const embed = {
-  yurinet: new Discord.RichEmbed(),
-  ddraw: new Discord.RichEmbed(),
-  game: new Discord.RichEmbed()
-};
-
+const yurinet, ddraw, game = new Discord.RichEmbed();
 //bot
 client.on('guildMemberAdd', async (member) => {
   console.log(`${member} Has join ${member.guild.name} server.`);
@@ -41,21 +36,21 @@ client.once('ready', () => {
   });
   replServer.context.client = client;
 
-  embed[yurinet].setAuthor(client.user.username, client.user.avatarURL)
+  yurinet.setAuthor(client.user.username, client.user.avatarURL)
     .setColor("#EE82EE")
     .addField("Download",
       "http://play.thaira2.com/download/yn0910_setup.exe")
     .addField("เล่นออน์ไลน์ ด้วย yurinet",
       "ติดตั้งโปรแกรม สมัคร ตั้งค่า แล้วไปลุยกันได้เลย")
     .setFooter("**แมว");
-  embed[game].setAuthor(client.user.username, client.user.avatarURL)
+  game.setAuthor(client.user.username, client.user.avatarURL)
     .setColor("#EE82EE")
     .addField("Download",
       "http://www.thaira2.com/download.html")
     .addField("ตัวเกม red alert 2 yuri revenge",
       "เลือก link โหลดตัวเกมเพียง link เดี่ยว")
     .setFooter("**แมว");
-  embed[ddraw].setAuthor(client.user.username, client.user.avatarURL)
+  ddraw.setAuthor(client.user.username, client.user.avatarURL)
     .setColor("#EE82EE")
     .addField("Download",
       "ดูได้ที่ห้อง <#340534866116608000>"
@@ -75,43 +70,37 @@ client.on('message', async (message) => {
   const messageArray = message.content.split(/\s+/g);
   if (!messageArray[0].startsWith(prefix)) return;
   let cmd = messageArray[0].slice(prefix.length).toLowerCase();
-  let checkembed = (cmd) => {
-    let list = ["ddraw", "yurinet", "game"];
-    return list.filter(x => x === cmd).length ? true : false;
-  };
-  if (checkembed) {
+  if (cmd === "ddraw") {
     message.channel.send({
-      embed: embed[cmd]
+      embed: ddraw
     });
-    return;
-  }
-
-  //music module
-  if (cmd === "play") {
+  } else if (cmd === "yurinet") {
+    message.channel.send({
+      embed: yurinet
+    });
+  } else if (cmd === "game") {
+    message.channel.send({
+      embed: game
+    });
+  } else if (cmd === "play") {
     message.delete();
     messageArray.shift();
     let query = messageArray.join(" ");
     musicController.asksong(message, query);
-    return;
-  }
-  if (cmd === "queue") {
+  } else if (cmd === "queue") {
     message.delete();
     musicController.checkafkbot(message);
     musicController.showqueue(message);
-    return;
-  }
-  if (cmd === "stop") {
+  } else if (cmd === "stop") {
     message.delete();
     musicController.checkafkbot(message);
     musicController.stop(message);
-    return;
-  }
-  if (cmd === "skip") {
+  } else if (cmd === "skip") {
     message.delete();
     musicController.checkafkbot(message);
     musicController.skip(message);
-    return;
-  }
+  };
+  return;
 });
 
 //Game chat
