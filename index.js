@@ -3,24 +3,75 @@
     The token of your bot - https://discordapp.com/developers/applications/me
     Please Config the config.json
 */
+
+/* process.on('uncaughtException', (ex) => {
+  console.error('Error uncaughtException : ', ex);
+});
+
+process.on('unhandledRejection', (ex) => {
+  console.error('Error uncaughtException :', ex);
+}); */
+
+const leaveFn = () => {
+  if (voiceChannelRoom) {
+    if (voiceChannelRoom.connection) {
+      voiceChannelRoom.connection.disconnect();
+    }
+    voiceChannelRoom.leave();
+  }
+  if (client) {
+    client.destroy();
+  }
+};
+
+process.on('SIGINT', () => {
+  console.log('SIGINT received');
+  leaveFn();
+});
+
+process.on('SIGKILL', () => {
+  console.log('SIGKILL received');
+  leaveFn();
+});
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received');
+  leaveFn();
+});
+
 // Import REPL for prompt
 const repl = require('repl');
 // Import the discord.js module
 const Discord = require('discord.js');
 const client = new Discord.Client({
-  autoReconnect: true
+  autoReconnect: true,
 });
 // Import config
 let config = require('./config.json');
 let prefix = config.commandPrefix;
-const chatlog = client.channels.get(config.chatlogidroom);
+
+let chatLogRoom;
+
+/**
+ * @type {Discord.VoiceChannel}
+ */
+let voiceChannelRoom;
+
 // Import Music controller
-const musicControllerSrc = require('./musicmodules/musiccontroller');
-const musicController = new musicControllerSrc();
+const musicControllerSrc = require('./modules/musiccontroller');
+
+/**
+ * @type {musicControllerSrc}
+ */
+let musicController;
 // Import Time Module
 const datetime = require("./modules/dateNtime");
 // embed
-let yurinet, ddraw, game = new Discord.RichEmbed();
+let yurinet, ddraw, game;
+yurinet = new Discord.RichEmbed();
+ddraw = new Discord.RichEmbed();
+game = new Discord.RichEmbed();
+
 //bot
 client.on('guildMemberAdd', async (member) => {
   console.log(`${member} Has join ${member.guild.name} server.`);
@@ -35,6 +86,10 @@ client.once('ready', () => {
     prompt: 'YuriBot > ',
   });
   replServer.context.client = client;
+
+  chatLogRoom = client.channels.get(config.chatlogidroom);
+  voiceChannelRoom = client.channels.get(config.voiceChannelId);
+  musicController = new musicControllerSrc(voiceChannelRoom);
 
   yurinet.setAuthor(client.user.username, client.user.avatarURL)
     .setColor("#EE82EE")
